@@ -1,5 +1,5 @@
 function DinomistStartup(deck)
-  print("Dinomist v0.1.0 by neftalimich.")
+  print("Dinomist v0.1.0.0 by neftalimich.")
   deck.Init					= DinomistInit
   deck.Card					= DinomistCard
   deck.Chain				= DinomistChain
@@ -69,6 +69,7 @@ DinomistActivateBlacklist={
 38988538, -- DPlesios
 01580833, -- DStegosaur
 32134638, -- DAnkylos
+50485594, -- DRHamster
 
 77116346, -- DCharge
 41128647, -- DPowerload
@@ -89,6 +90,7 @@ DinomistSummonBlacklist={
 38988538, -- DPlesios
 01580833, -- DStegosaur
 32134638, -- DAnkylos
+50485594, -- DRHamster
 
 22638495, -- DPower
 }
@@ -101,6 +103,7 @@ DinomistSetBlacklist={
 38988538, -- DPlesios
 01580833, -- DStegosaur
 32134638, -- DAnkylos
+50485594, -- DRHamster
 
 77116346, -- DCharge
 41128647, -- DPowerload
@@ -1006,12 +1009,13 @@ DinomistPriorityList={
 [38988538] = {9,1,9,1,1,1,1,1,1,1,DPlesiosCond},	-- DPlesios
 [01580833] = {2,1,3,1,9,1,9,1,1,1,DStegosaurCond},	-- DStegosaur
 [32134638] = {6,1,6,1,6,1,2,1,1,1,DAnkylosCond},	-- DAnkylos
+[50485594] = {1,1,1,1,1,1,1,1,1,1,nil},				-- DRHamster
 
 [77116346] = {11,1,1,1,1,1,1,1,1,1,DChargeCond},		-- DCharge
 [41128647] = {1,1,1,1,1,1,1,1,1,1,DPowerloadCond},	-- DPowerload
 
 [41554273] = {1,1,1,1,1,1,1,1,1,1,DRushCond},		-- DRush
-[60675348] = {10,1,1,1,1,1,1,1,1,1,DHowling},		-- DHowling
+[60675348] = {10,1,1,1,1,1,1,1,1,1,DHowling},		-- DHowling (BETA)
 
 [22638495] = {1,1,1,1,1,1,1,1,1,1,DPowerCond},		-- DPower
 }
@@ -1090,6 +1094,13 @@ function DinomistInit(cards)
   then
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
+  print("__1.2")
+  if HasIDNotNegated(Act,50485594,false,nil,LOCATION_MZONE) then -- DRHamster
+    return {COMMAND_ACTIVATE,CurrentIndex}
+  end
+  if HasIDNotNegated(Sum,50485594,SummonDRHamster) then
+    return {COMMAND_SUMMON,CurrentIndex}
+  end
 
   print("__1.2")
   -- PENDULUM CHECK
@@ -1158,7 +1169,8 @@ function DinomistInit(cards)
 
   -- NORMAL SUMMON
   print("__1.4")
-  if #Sum > 0
+  local sumDinomist = CardsMatchingFilter(Sum,DinomistMonFilter)
+  if sumDinomist > 0
   and (
     not HasID(UseLists({AIHand(),AIMon(),AIExtra()}),63251695,true) -- DRex
     or scalecheck ~= true
@@ -1175,12 +1187,20 @@ function DinomistInit(cards)
 
   -- PENDULUM SUMMON
   print("__1.5")
-  for i=1,#SpSum do
-    if PendulumCheck(SpSum[i]) then
-      GlobalPendulumSummoning = true
-      GlobalPendulum = Duel.GetTurnCount()
-	  print("PendulumCheck")
-      return {COMMAND_SPECIAL_SUMMON,i}
+  if scalecheck == true then
+    local pSummoneable = CardsMatchingFilter(UseLists({AIHand(),AIExtra()}),DPendulumSummonableFilter)
+    print("pSummoneable",pSummoneable)
+    if pSummoneable > 0
+    then
+      for i=1,#SpSum do
+        if PendulumCheck(SpSum[i]) 
+	    then
+          GlobalPendulumSummoning = true
+          GlobalPendulum = Duel.GetTurnCount()
+	      print("PendulumCheck")
+          return {COMMAND_SPECIAL_SUMMON,i}
+        end
+      end
     end
   end
   print("__1.6")
@@ -1269,6 +1289,42 @@ function DIgnoreSaveFilter(c)
   return
     c.id == 41554273
 	or c.id == 01580833
+end
+
+function DPendulumSummonableFilter(c,scalecheck)
+  print("DPendulumSummonableFilter",ScaleCheck())
+  if ScaleCheck()~=true then
+    return false
+  end
+  local l,r = GetScales(p)
+  --print("GetScales",l.lscale,r.rscale)
+  local result = false
+  if 
+    FilterType(c,TYPE_MONSTER)
+    and FilterRevivable(c)
+    and (
+	  FilterLocation(c,LOCATION_HAND)
+      or 
+	  FilterLocation(c,LOCATION_EXTRA)
+      and FilterPosition(c,POS_FACEUP)
+      and FilterType(c,TYPE_PENDULUM)
+	)
+    and (
+	  (c.level > l.lscale and c.level < r.lscale)
+	  or
+	  (c.level < l.lscale and c.level > r.lscale)
+	)
+	and not DPendulumSummonableExceptFilter(c)
+	then
+	  result = true
+	end
+	print(c.id,c.level,result)
+	return result
+end
+
+function DPendulumSummonableExceptFilter(c)
+  return
+    c.id == 50485594
 end
 ------------------------
 -------- CHECK --------
@@ -1484,6 +1540,11 @@ function DinomistYesNo(description_id)
 		  then
 		    return true
 		  end
+		  if CardsMatchingFilter(removeCheckList,FilterID,77116346) -- DCharge
+		  == CardsMatchingFilter(AIST(),FilterID,77116346) -- DCharge
+		  then
+		    return true
+		  end
 		  local dIgnoreSaveCount = CardsMatchingFilter(removeCheckList,DIgnoreSaveFilter)
 		  --print("dIgnoreSaveCount",dIgnoreSaveCount)
 		  if dIgnoreSaveCount == #removeCheckList then
@@ -1516,6 +1577,11 @@ function DinomistYesNo(description_id)
 		if removeCheckList ~= false and #removeCheckList > 0 then
 		  print("removeCheckList",#removeCheckList)
 		  if CardsMatchingFilter(removeCheckList,FilterID,60675348) > 0 -- DHowling
+		  then
+		    return true
+		  end
+		  if CardsMatchingFilter(removeCheckList,FilterID,77116346) -- DCharge
+		  == CardsMatchingFilter(AIST(),FilterID,77116346) -- DCharge
 		  then
 		    return true
 		  end
@@ -1563,6 +1629,23 @@ end
 ------------------------
 function SummonDPlesios(c)
   return true
+end
+
+function SummonDRHamster(c)
+  print("SummonDRHamster")
+  local extraFaceUp = SubGroup(AIExtra(),FilterPosition,POS_FACEUP)
+  local pendulumFaceUp = SubGroup(extraFaceUp,FilterType,TYPE_PENDULUM)
+  if #pendulumFaceUp > 0 then
+    for i=1, #pendulumFaceUp do
+	  local c = pendulumFaceUp[i]
+	  if c.level <= 5 
+	  and CardsMatchingFilter(AIDeck(),FilterID,c.id) == 2 
+	  then
+	    return true
+	  end
+	end
+  end
+  return false
 end
 ------------------------
 -------- TARGET --------
@@ -1730,7 +1813,8 @@ function DinomistCard(cards,min,max,id,c)
   if GlobalPendulumSummoning and Duel.GetCurrentChain()==0 then
 	GlobalPendulumSummoning = nil
 	print("PendulumSummoning")
-	local x = max
+	local exceptCount = CardsMatchingFilter(cards,DPendulumSummonableExceptFilter)
+	local x = max - exceptCount
 	return Add(cards,PRIO_TOFIELD,max)
   end
 
