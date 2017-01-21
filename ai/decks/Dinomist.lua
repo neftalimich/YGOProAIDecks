@@ -75,7 +75,7 @@ DinomistActivateBlacklist={
 23171610, -- DLRemoval
 
 41554273, -- DRush
-100912109, -- DHowling (BETA)
+60675348, -- DHowling
 15582767, -- EOscilation
 
 22638495, -- DPower
@@ -107,7 +107,7 @@ DinomistSetBlacklist={
 --23171610, -- LRemoval
 
 41554273, -- DRush
-100912109, -- DHowling (BETA)
+60675348, -- DHowling
 15582767, -- EOscilation
 }
 DinomistUnchainable={
@@ -124,7 +124,7 @@ DinomistUnchainable={
 41128647, -- DPowerload
 
 41554273, -- DRush
-100912109, -- DHowling (BETA)
+60675348, -- DHowling
 15582767, -- EOscilation
 
 22638495, -- DPower
@@ -1011,7 +1011,7 @@ DinomistPriorityList={
 [41128647] = {1,1,1,1,1,1,1,1,1,1,DPowerloadCond},	-- DPowerload
 
 [41554273] = {1,1,1,1,1,1,1,1,1,1,DRushCond},		-- DRush
-[100912109] = {10,1,1,1,1,1,1,1,1,1,DHowling},		-- DHowling (BETA)
+[60675348] = {10,1,1,1,1,1,1,1,1,1,DHowling},		-- DHowling
 
 [22638495] = {1,1,1,1,1,1,1,1,1,1,DPowerCond},		-- DPower
 }
@@ -1029,7 +1029,7 @@ DinomistPriorityList={
 41128647, -- DPowerload
 
 41554273, -- DRush
-100912109, -- DHowling (BETA)
+60675348, -- DHowling
 15582767, -- EOscilation
 
 22638495, -- DPower
@@ -1071,7 +1071,7 @@ function DinomistInit(cards)
   if HasID(Act,77116346,ActiveDCharge) then
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
-  if HasID(Act,100912109,ActiveDHowling) then
+  if HasID(Act,60675348,ActiveDHowling) then
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
   if HasIDNotNegated(Act,15582767,UseDEOscilation) then
@@ -1086,7 +1086,7 @@ function DinomistInit(cards)
   then
     return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
   end
-  if HasIDNotNegated(Act,100912109,UseDHowling)
+  if HasIDNotNegated(Act,60675348,UseDHowling)
   then
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
@@ -1097,7 +1097,7 @@ function DinomistInit(cards)
   and (
     not (
       not BattlePhaseCheck()
-	  and HasID(UseLists({AIHand(),AIST()}),100912109,true) -- DHowling
+	  and HasID(UseLists({AIHand(),AIST()}),60675348,true) -- DHowling
     )
 	or (
 	  HasID(UseLists({AIHand(),AIST()}),15582767,true) -- DEOscilation
@@ -1123,7 +1123,7 @@ function DinomistInit(cards)
       monToPendulumSummon > 1
 	  or (
 	    dinomistMonHand > 1
-	    and not HasID(UseLists({AIHand(),AIST()}),100912109,true) -- DHowling
+	    and not HasID(UseLists({AIHand(),AIST()}),60675348,true) -- DHowling
 	  )
     )
     then
@@ -1198,7 +1198,7 @@ function DinomistInit(cards)
 	if HasIDNotNegated(SetST,41554273,SetDRush) then
       return {COMMAND_SET_ST ,CurrentIndex}
     end
-	if HasIDNotNegated(SetST,100912109) then -- DHowling
+	if HasIDNotNegated(SetST,60675348) then -- DHowling
       return {COMMAND_SET_ST ,CurrentIndex}
     end
 	if HasIDNotNegated(SetST,15582767,SetGenericST) then -- EOscilation
@@ -1421,7 +1421,7 @@ end
 41128647, -- DPowerload
 
 41554273, -- DRush
-100912109, -- DHowling (BETA)
+60675348, -- DHowling
 15582767, -- EOscilation
 
 22638495, -- DPower
@@ -1480,7 +1480,7 @@ function DinomistYesNo(description_id)
 		local ignoreSave = false
 		if removeCheckList ~= false and #removeCheckList > 0 then
 		  print("removeCheckList",#removeCheckList)
-		  if CardsMatchingFilter(removeCheckList,FilterID,100912109) > 0 -- DHowling
+		  if CardsMatchingFilter(removeCheckList,FilterID,60675348) > 0 -- DHowling
 		  then
 		    return true
 		  end
@@ -1515,7 +1515,7 @@ function DinomistYesNo(description_id)
 		local ignoreSave = false
 		if removeCheckList ~= false and #removeCheckList > 0 then
 		  print("removeCheckList",#removeCheckList)
-		  if CardsMatchingFilter(removeCheckList,FilterID,100912109) > 0 -- DHowling
+		  if CardsMatchingFilter(removeCheckList,FilterID,60675348) > 0 -- DHowling
 		  then
 		    return true
 		  end
@@ -1703,7 +1703,7 @@ end
 41128647, -- DPowerload
 
 41554273, -- DRush
-100912109, -- DHowling (BETA)
+60675348, -- DHowling
 15582767, -- EOscilation
 
 22638495, -- DPower
@@ -1718,7 +1718,7 @@ DinomistTargetFunctions = {
 [22123627] = DMGreedTarget,			-- DMGreed
 
 [41554273] = DRushTarget,			-- DRush
-[100912109] = DHowlingTarget,		-- DHowling
+[60675348] = DHowlingTarget,		-- DHowling
 [15582767] = DEOscilationTarget,	-- DEOscilation
 }
 
@@ -1884,12 +1884,12 @@ DinomistChainFunctions={
 [94937430] = ChainDEBuck,		-- DEBuck
 }
 function DinomistChain(cards)
-  if HasIDNotNegated(cards,100912109,false,nil,nil,POS_FACEDOWN)
+  if HasIDNotNegated(cards,60675348,false,nil,nil,POS_FACEDOWN)
   and ChainActiveDHowling(cards[CurrentIndex])
   then
     return Chain()
   end
-  if HasIDNotNegated(cards,100912109,false,nil,nil,POS_FACEUP)
+  if HasIDNotNegated(cards,60675348,false,nil,nil,POS_FACEUP)
   and ChainUseDHowling(cards[CurrentIndex])
   then
     return Chain()
@@ -1919,7 +1919,7 @@ end
 41128647, -- DPowerload
 
 41554273, -- DRush
-100912109, -- DHowling (BETA)
+60675348, -- DHowling
 15582767, -- EOscilation
 
 22638495, -- DPower
@@ -1996,7 +1996,7 @@ end
 41128647, -- DPowerload
 
 41554273, -- DRush
-100912109, -- DHowling (BETA)
+60675348, -- DHowling
 15582767, -- EOscilation
 
 22638495, -- DPower
