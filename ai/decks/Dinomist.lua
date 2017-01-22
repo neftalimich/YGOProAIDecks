@@ -1174,6 +1174,7 @@ function DinomistInit(cards)
   and (
     not HasID(UseLists({AIHand(),AIMon(),AIExtra()}),63251695,true) -- DRex
     or scalecheck ~= true
+	or Duel.GetCurrentPhase() == PHASE_MAIN2
   )
   then -- DRex
 	local sumDinomist = Add(Sum,PRIO_TOFIELD,1)
@@ -1183,6 +1184,11 @@ function DinomistInit(cards)
 	  print("summon",sumDinomist[1])
 	  return {COMMAND_SUMMON,sumDinomist[1]}
 	end
+  end
+  
+  if HasIDNotNegated(Act,05067884,UseDSpinos) 
+  then
+    return {COMMAND_ACTIVATE,CurrentIndex}
   end
 
   -- PENDULUM SUMMON
@@ -1292,7 +1298,7 @@ function DIgnoreSaveFilter(c)
 end
 
 function DPendulumSummonableFilter(c,scalecheck)
-  print("DPendulumSummonableFilter",ScaleCheck())
+  --print("DPendulumSummonableFilter",ScaleCheck())
   if ScaleCheck()~=true then
     return false
   end
@@ -1318,7 +1324,7 @@ function DPendulumSummonableFilter(c,scalecheck)
 	then
 	  result = true
 	end
-	print(c.id,c.level,result)
+	--print(c.id,c.level,result)
 	return result
 end
 
@@ -1354,15 +1360,64 @@ end
 ------------------------
 --------- USE ----------
 ------------------------
-function UseDSpinosDirectAttack(c)
+function UseDSpinos(c)
+  print("UseDSpinos")
+  if not OPTCheck(c.id + 1) and not OPTCheck(c.id + 2)
+  then
+    return false
+  end
+  if GlobalPendulum ~= Duel.GetTurnCount()
+  and ScaleCheck() == true
+  then 
+    return true
+  end
+  -- Double
+  if not OPTCheck(c.id + 1) 
+  or 
+  #OppMon() == 0
+  then
+    --OPTSet(c.id + 2)
+    return true
+  end
+  -- Direct
+  if #OppMon() == 0 then
+    return false
+  end
+  if AI.GetPlayerLP(2) <= c.attack
+  or 
+  AI.GetPlayerLP(2) <= (c.attack * 2)
+  and (
+    not OPTCheck(c.id + 2)
+	or 
+	CardsMatchingFilter(AIMon(),DinomistFilter) >= 3
+  )
+  then
+    --OPTSet(c.id + 1)
+    return true
+  end
   return false
 end
-function UseDSpinosDoubleAttack(c)
+function UseDSpinosDirectAttack()
+  if #OppMon() == 0 then
+    return false
+  end
+  OPTSet(05067884 + 1)
+  return true
+end
+function UseDSpinosDoubleAttack()
+  if not OPTCheck(05067884 + 1) 
+  or 
+  #OppMon() == 0
+  then
+    OPTSet(05067884 + 2)
+    return true
+  end
   return false
 end
 function UseDRexShuffle(c)
   if CardsMatchingFilter(AIMon(),AvailableAttacksFilter,0) > 1
   then
+    OPTSet(c.id)
     return true
   end
   return false
@@ -1483,8 +1538,6 @@ end
 22638495, -- DPower
 ]]
 UseDinomistFunctions = {
-[05067884] = UseDSpinosDirectAttack,	-- DSpinos
-[05067885] = UseDSpinosDoubleAttack,	-- DSpinos
 [63251695] = UseDRexShuffle,			-- DRex
 [63251696] = UseDRexAttack,				-- DRex
 [64973287] = UseDPteran,				-- DPteran
@@ -1618,6 +1671,18 @@ function DinomistOption(options)
 	end
 	if ((options[i] - 2) / 16) == 63251695 then -- DRex Field
 	  print("DRex Option - Field")
+	  return i
+	end
+	if ((options[i] - 2) / 16) == 05067884  -- DSpinos Double
+	and UseDSpinosDoubleAttack()
+	then
+	  print("DSpinos Option - Double")
+	  return i
+	end
+	if ((options[i] - 1) / 16) == 05067884  -- DSpinos Direct
+	and UseDSpinosDirectAttack()
+	then
+	  print("DSpinos Option - Direct")
 	  return i
 	end
   end

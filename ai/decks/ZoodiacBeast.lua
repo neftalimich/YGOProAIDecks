@@ -1238,9 +1238,6 @@ function ZoodiacBeastInit(cards)
   if HasIDNotNegated(Act,30741334) then -- ZBGiantrainer
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
-  if HasIDNotNegated(Act,31755044,UseZBViper) then
-    return {COMMAND_ACTIVATE,CurrentIndex}
-  end
 
   if MaxxCheck() then
     -- ZBTerrortop
@@ -1295,6 +1292,9 @@ function ZoodiacBeastInit(cards)
 	-- ZBTigerKing
     if HasIDNotNegated(SpSum,96381979,SummonZBTigerKing) then
       return XYZSummon(nil,96381979)
+    end
+	if HasIDNotNegated(Act,31755044,UseZBViper) then
+      return {COMMAND_ACTIVATE,CurrentIndex}
     end
 	-- ZBTriangle
     if HasIDNotNegated(Act,46060017,nil,nil,LOCATION_HAND,ActiveZBTriangle)
@@ -1776,6 +1776,7 @@ function SummonZBLayca(c)
   and not HasID(AIMon(),c.id,true)
   and OPTCheck(c.id + 1)
   and CardsMatchingFilter(zbMon,FilterAttackMin,1) > 0
+  and OPTCheck(48905153 + 1) -- ZBDrancia
   then
     GlobalZBSummonId = c.id
 	OPTSet(c.id + 1)
@@ -2465,7 +2466,10 @@ function ZoodiacBeastBattleCommand(cards, activatable)
   end
   
   if HasIDNotNegated(cards,31755044) -- ZBViper
-  and CanWinBattle(cards[CurrentIndex],targets)
+  and (
+    CanWinBattle(cards[CurrentIndex],targets)
+	or #OppMon() == 0
+  )
   then
     return Attack(CurrentIndex)
   end
