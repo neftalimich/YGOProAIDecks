@@ -33,7 +33,7 @@ function ZoodiacBeastStartup(deck)
   deck.PriorityList         = ZoodiacBeastPriorityList
 
   -- Debug Mode
-  --[[]]
+  --[[
   local e0=Effect.GlobalEffect()
 	e0:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e0:SetCode(EVENT_CHAIN_SOLVED)
@@ -1238,7 +1238,6 @@ function ZoodiacBeastInit(cards)
   if HasIDNotNegated(Act,30741334) then -- ZBGiantrainer
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
-
   if MaxxCheck() then
     -- ZBTerrortop
     if HasIDNotNegated(SpSum,81275020,SummonZBTerrortop) then
@@ -1328,7 +1327,6 @@ function ZoodiacBeastInit(cards)
       return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
     end
   end
-
   -- ZBDaigusto
   if HasIDNotNegated(SpSum,00581014,SummonZBDaigusto) then
     return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
@@ -1662,6 +1660,17 @@ end
 function ZoodiacBeastOption(options)
   print("Options:")
   for i=1,#options do
+    print(options[i])
+	if options[i] == (48905153 * 16) -- ZBDrancia
+	or options[i] == (48905153 * 16) -- ZBDrancia
+	or options[i] == (74393852 * 16) -- ZBBoarbow
+	or options[i] == (41375811 * 16) -- ZBLayca
+	or options[i] == (85115440 * 16) -- ZBBroadbull
+	or options[i] == (11510448 * 16) -- ZBTigress
+	or options[i] == (14970113 * 16) -- ZBHammerkong
+	then
+	  return i -- ZBEffect
+	end
     if options[i] == (67136033*16) then -- ZBBearman
 	  return i
 	end
