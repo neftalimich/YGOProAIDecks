@@ -1,5 +1,5 @@
 function ZoodiacBeastStartup(deck)
-  print("ZoodiacBeast v2.0.0 by neftalimich.")
+  print("ZoodiacBeast v2.0.2 by neftalimich.")
   deck.Init					= ZoodiacBeastInit
   deck.Card					= ZoodiacBeastCard
   deck.Chain				= ZoodiacBeastChain
@@ -64,16 +64,16 @@ DECK_ZoodiacBeast = NewDeck("ZoodiacBeast",ZoodiacBeastIdentifier,ZoodiacBeastSt
 ------------------------
 ZoodiacBeastActivateBlacklist={
 77150143, -- ZBThroughblade
-31755044, -- ZBViper
+31755044, -- ZBWhiptail
 20155904, -- ZBCluckle
 04367330, -- ZBRabbina
 04145852, -- ZBRam
-78872731, -- ZBMarmorat
+78872731, -- ZBRatpier
 67136033, -- ZBBearman
 81275020, -- STerrotop
 53932291, -- STaketomborg
 
-46060017, -- ZBTriangle
+46060017, -- ZBBarrage
 00675319, -- ZBSign
 57103969, -- ZBTenki
 10719350, -- ZBTensu
@@ -81,11 +81,11 @@ ZoodiacBeastActivateBlacklist={
 --98918572, -- ZBXiangke
 98954106, -- ZBJAvarice
 
-48905153, -- ZBDrancia
+48905153, -- ZBDrident
 74393852, -- ZBBoarbow
 41375811, -- ZBLayca
 85115440, -- ZBBroadbull
-11510448, -- ZBTigress
+11510448, -- ZBTigermortar
 14970113, -- ZBHammerkong
 
 30741334, -- ZBGiantrainer
@@ -95,20 +95,20 @@ ZoodiacBeastActivateBlacklist={
 }
 ZoodiacBeastSummonBlacklist={
 77150143, -- ZBThroughblade
-31755044, -- ZBViper
+31755044, -- ZBWhiptail
 20155904, -- ZBCluckle
 04367330, -- ZBRabbina
 04145852, -- ZBRam
-78872731, -- ZBMarmorat
+78872731, -- ZBRatpier
 67136033, -- ZBBearman
 81275020, -- STerrotop
 53932291, -- STaketomborg
 
-48905153, -- ZBDrancia
+48905153, -- ZBDrident
 74393852, -- ZBBoarbow
 41375811, -- ZBLayca
 85115440, -- ZBBroadbull
-11510448, -- ZBTigress
+11510448, -- ZBTigermortar
 14970113, -- ZBHammerkong
 
 30741334, -- ZBGiantrainer
@@ -117,7 +117,7 @@ ZoodiacBeastSummonBlacklist={
 04423206, -- ZBInvoker
 }
 ZoodiacBeastSetBlacklist={
-46060017, -- ZBTriangle
+46060017, -- ZBBarrage
 00675319, -- ZBSign
 57103969, -- ZBTenki
 10719350, -- ZBTensu
@@ -163,6 +163,9 @@ function ZBThroughbladeCond(loc,c)
 	 return PriorityCheck(AIHand(),PRIO_DISCARD,1) > 2
 	end
 	if FilterLocation(c,LOCATION_GRAVE) then
+	  if GlobalZBEffectId == 41375811 then -- ZBLayca
+	    return true
+	  end
 	  return PriorityCheck(AIHand(),PRIO_DISCARD,1) > 2
 	end
 	if FilterLocation(c,LOCATION_REMOVED) then
@@ -181,7 +184,7 @@ function ZBThroughbladeCond(loc,c)
 	end
 	if FilterLocation(c,LOCATION_ONFIELD) then
 	  if Negated(c) then
-	    return 6
+	    return 16
 	  end
 	  return true
 	end
@@ -212,7 +215,7 @@ function ZBThroughbladeCond(loc,c)
   return true
 end
 
-function ZBViperCond(loc,c)
+function ZBWhiptailCond(loc,c)
   if loc == PRIO_TOHAND then
     if FilterLocation(c,LOCATION_DECK)
 	then
@@ -257,7 +260,7 @@ function ZBViperCond(loc,c)
 	end
 	if FilterLocation(c,LOCATION_ONFIELD) then
 	  if Negated(c) then
-	    return 5
+	    return 15
 	  end
 	  return true
 	end
@@ -286,8 +289,8 @@ end
 
 function ZBCluckleCond(loc,c)
   if loc == PRIO_TOHAND then
-    if FilterLocation(c,LOCATION_DECK) 
-	or FilterLocation(c,LOCATION_ONFIELD) 
+    if FilterLocation(c,LOCATION_DECK)
+	or FilterLocation(c,LOCATION_ONFIELD)
 	or FilterLocation(c,LOCATION_GRAVE)
 	then
 	  return not HasID(AIHand(),c.id,true)
@@ -319,7 +322,7 @@ function ZBCluckleCond(loc,c)
 	end
 	if FilterLocation(c,LOCATION_ONFIELD) then
 	  if Negated(c) then
-	    return 10
+	    return 20
 	  end
 	  return true
 	end
@@ -348,8 +351,8 @@ end
 
 function ZBRabbinaCond(loc,c)
   if loc == PRIO_TOHAND then
-    if FilterLocation(c,LOCATION_DECK) 
-	or FilterLocation(c,LOCATION_ONFIELD) 
+    if FilterLocation(c,LOCATION_DECK)
+	or FilterLocation(c,LOCATION_ONFIELD)
 	or FilterLocation(c,LOCATION_GRAVE)
 	then
 	  return not HasID(AIHand(),c.id,true)
@@ -381,7 +384,7 @@ function ZBRabbinaCond(loc,c)
 	end
 	if FilterLocation(c,LOCATION_ONFIELD) then
 	  if Negated(c) then
-	    return 9
+	    return 19
 	  end
 	  return true
 	end
@@ -410,8 +413,8 @@ end
 
 function ZBRamCond(loc,c)
   if loc == PRIO_TOHAND then
-    if FilterLocation(c,LOCATION_DECK) 
-	or FilterLocation(c,LOCATION_ONFIELD) 
+    if FilterLocation(c,LOCATION_DECK)
+	or FilterLocation(c,LOCATION_ONFIELD)
 	or FilterLocation(c,LOCATION_GRAVE)
 	then
 	  return not HasID(AIHand(),c.id,true)
@@ -443,7 +446,7 @@ function ZBRamCond(loc,c)
 	end
 	if FilterLocation(c,LOCATION_ONFIELD) then
 	  if Negated(c) then
-	    return 8
+	    return 18
 	  end
 	  return true
 	end
@@ -470,7 +473,7 @@ function ZBRamCond(loc,c)
   return true
 end
 
-function ZBMarmoratCond(loc,c)
+function ZBRatpierCond(loc,c)
   if loc == PRIO_TOHAND then
     if FilterLocation(c,LOCATION_DECK)
 	then
@@ -493,9 +496,14 @@ function ZBMarmoratCond(loc,c)
 	  return true
 	end
 	if FilterLocation(c,LOCATION_DECK) then
-	  return CardsMatchingFilter(AIMon(),ZBXyzFilter) == 0
+	  return
+	    CardsMatchingFilter(AIMon(),ZBXyzFilter) == 0
+		and not HasID(AIMon(),c.id,true)
 	end
 	if FilterLocation(c,LOCATION_GRAVE) then
+	  if GlobalZBEffectId == 41375811 then -- ZBLayca
+	    return false
+	  end
 	  return true
 	end
 	if FilterLocation(c,LOCATION_REMOVED) then
@@ -514,7 +522,7 @@ function ZBMarmoratCond(loc,c)
 	end
 	if FilterLocation(c,LOCATION_ONFIELD) then
 	  if Negated(c) then
-	    return 7
+	    return 17
 	  end
 	  return true
 	end
@@ -560,7 +568,7 @@ function ZBBearmanCond(loc,c)
   return true
 end
 
-function ZBTriangleCond(loc,c)
+function ZBBarrageCond(loc,c)
   if loc == PRIO_TOHAND then
     if FilterLocation(c,LOCATION_DECK)
 	then
@@ -701,7 +709,7 @@ function ZBTensuCond(loc,c)
   return true
 end
 
-function ZBDranciaCond(loc,c)
+function ZBDridentCond(loc,c)
   if loc == PRIO_TOHAND then
     if FilterLocation(c,LOCATION_DECK)
 	then
@@ -753,7 +761,12 @@ function ZBDranciaCond(loc,c)
 	  return true
 	end
 	if FilterLocation(c,LOCATION_GRAVE) then
-	  return true
+	  if CardsMatchingFilter(AIExtra(),FilterID,c.id) == 0
+	  then
+	    return true
+	  else
+	    return false
+	  end
 	end
   end
   if loc == PRIO_BANISH then
@@ -819,7 +832,12 @@ function ZBBoarbowCond(loc,c)
 	  return true
 	end
 	if FilterLocation(c,LOCATION_GRAVE) then
-	  return true
+	  if CardsMatchingFilter(AIExtra(),FilterID,c.id) == 0
+	  then
+	    return true
+	  else
+	    return false
+	  end
 	end
   end
   if loc == PRIO_BANISH then
@@ -885,7 +903,12 @@ function ZBLaycaCond(loc,c)
 	  return true
 	end
 	if FilterLocation(c,LOCATION_GRAVE) then
-	  return true
+	  if CardsMatchingFilter(AIExtra(),FilterID,c.id) == 0
+	  then
+	    return true
+	  else
+	    return false
+	  end
 	end
   end
   if loc == PRIO_BANISH then
@@ -951,7 +974,12 @@ function ZBBroadbullCond(loc,c)
 	  return true
 	end
 	if FilterLocation(c,LOCATION_GRAVE) then
-	  return true
+	  if CardsMatchingFilter(AIExtra(),FilterID,c.id) == 0
+	  then
+	    return true
+	  else
+	    return false
+	  end
 	end
   end
   if loc == PRIO_BANISH then
@@ -965,7 +993,7 @@ function ZBBroadbullCond(loc,c)
   return true
 end
 
-function ZBTigressCond(loc,c)
+function ZBTigermortarCond(loc,c)
   if loc == PRIO_TOHAND then
     if FilterLocation(c,LOCATION_DECK)
 	then
@@ -1017,7 +1045,12 @@ function ZBTigressCond(loc,c)
 	  return true
 	end
 	if FilterLocation(c,LOCATION_GRAVE) then
-	  return true
+	  if CardsMatchingFilter(AIExtra(),FilterID,c.id) == 0
+	  then
+	    return true
+	  else
+	    return false
+	  end
 	end
   end
   if loc == PRIO_BANISH then
@@ -1083,7 +1116,12 @@ function ZBHammerkongCond(loc,c)
 	  return true
 	end
 	if FilterLocation(c,LOCATION_GRAVE) then
-	  return true
+	  if CardsMatchingFilter(AIExtra(),FilterID,c.id) == 0
+	  then
+	    return true
+	  else
+	    return false
+	  end
 	end
   end
   if loc == PRIO_BANISH then
@@ -1099,40 +1137,40 @@ end
 
 ZoodiacBeastPriorityList={
 [77150143] = {8,1,8,1,4,1,3,1,1,1,ZBThroughbladeCond},	-- ZBThroughblade
-[31755044] = {7,1,7,1,3,1,4,1,1,1,ZBViperCond},			-- ZBViper
+[31755044] = {7,1,7,1,3,1,4,1,1,1,ZBWhiptailCond},		-- ZBWhiptail
 [20155904] = {6,1,6,1,2,1,2,1,1,1,ZBCluckleCond},		-- ZBCluckle
 [04367330] = {6,1,6,1,2,1,2,1,1,1,ZBRabbinaCond},		-- ZBRabbina
 [04145852] = {6,1,6,1,2,1,2,1,1,1,ZBRamCond},			-- ZBRam
-[78872731] = {9,1,9,1,4,1,5,1,1,1,ZBMarmoratCond},		-- ZBMarmorat
+[78872731] = {9,1,9,1,5,1,5,1,1,1,ZBRatpierCond},		-- ZBRatpier
 [67136033] = {1,1,1,1,1,1,3,1,1,1,ZBBearmanCond},		-- ZBBearman
 
-[46060017] = {1,1,1,1,1,1,1,1,1,1,ZBTriangleCond},		-- ZBTriangle
+[46060017] = {1,1,1,1,1,1,1,1,1,1,ZBBarrageCond},		-- ZBBarrage
 [57103969] = {8,1,1,1,1,1,1,1,1,1,ZBTenkiCond},			-- ZBTenki
 [10719350] = {9,1,1,1,1,1,1,1,1,1,ZBTensuCond},			-- ZBTensu
 [73881652] = {1,1,1,1,1,1,1,1,1,1,nil},					-- ZBDirection
 [98918572] = {1,1,1,1,1,1,1,1,1,1,nil},					-- ZBXiangke
 
-[48905153] = {1,1,1,1,9,1,9,1,1,1,ZBDranciaCond},		-- ZBDrancia
-[74393852] = {1,1,1,1,8,1,6,1,1,1,ZBBoarbowCond},		-- ZBBoarbow
-[41375811] = {1,1,1,1,7,1,8,1,1,1,ZBLaycaCond},			-- ZBLayca
-[85115440] = {1,1,1,1,6,1,5,1,1,1,ZBBroadbullCond},		-- ZBBroadbull
-[11510448] = {1,1,1,1,5,1,7,1,1,1,ZBTigressCond},		-- ZBTigress
-[14970113] = {1,1,1,1,4,1,4,1,1,1,ZBHammerkongCond},	-- ZBHammerkong
+[48905153] = {1,1,1,1,9,1,19,9,1,1,ZBDridentCond},		-- ZBDrident
+[74393852] = {1,1,1,1,8,1,16,6,1,1,ZBBoarbowCond},		-- ZBBoarbow
+[41375811] = {1,1,1,1,7,1,18,8,1,1,ZBLaycaCond},		-- ZBLayca
+[85115440] = {1,1,1,1,6,1,15,5,1,1,ZBBroadbullCond},	-- ZBBroadbull
+[11510448] = {1,1,1,1,5,1,17,7,1,1,ZBTigermortarCond},	-- ZBTigermortar
+[14970113] = {1,1,1,1,4,1,14,4,1,1,ZBHammerkongCond},	-- ZBHammerkong
 
-[00581014] = {1,1,1,1,1,1,1,1,1,1,nil},				-- ZBDaigusto
+[00581014] = {1,1,1,1,1,1,1,1,1,1,nil},					-- ZBDaigusto
 }
 --[[LIST
 77150143, -- ZBThroughblade
-31755044, -- ZBViper
+31755044, -- ZBWhiptail
 20155904, -- ZBCluckle
 04367330, -- ZBRabbina
 04145852, -- ZBRam
-78872731, -- ZBMarmorat
+78872731, -- ZBRatpier
 67136033, -- ZBBearman
 81275020, -- STerrotop
 53932291, -- STaketomborg
 
-46060017, -- ZBTriangle
+46060017, -- ZBBarrage
 00675319, -- ZBSign
 57103969, -- ZBTenki
 10719350, -- ZBTensu
@@ -1140,11 +1178,11 @@ ZoodiacBeastPriorityList={
 98918572, -- ZBXiangke
 98954106, -- ZBJAvarice
 
-48905153, -- ZBDrancia
+48905153, -- ZBDrident
 74393852, -- ZBBoarbow
 41375811, -- ZBLayca
 85115440, -- ZBBroadbull
-11510448, -- ZBTigress
+11510448, -- ZBTigermortar
 14970113, -- ZBHammerkong
 
 30741334, -- ZBGiantrainer
@@ -1162,10 +1200,10 @@ function ZoodiacBeastInit(cards)
 
   -- GLOBAL RESET
   GlobalZBSummonId = 0
-  GlobalZBTriangle = 0
+  GlobalZBBarrage = 0
   GlobalZodiacSign = 0
   GlobalZBEffectId = 0
-  
+
   -- REPOSITION
   if CardsMatchingFilter(Rep,FilterPosition,POS_FACEDOWN_DEFENSE) > 0
   then
@@ -1219,16 +1257,37 @@ function ZoodiacBeastInit(cards)
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
   -- ACTIVE 1
-  if HasIDNotNegated(Act,48905153,false,(48905153*16+1),UseZBDrancia) then
+  if HasIDNotNegated(Act,48905153,false,(48905153*16+1),UseZBDrident) then
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
   if HasIDNotNegated(Act,41375811,false,(41375811*16+1),UseZBLayca) then
-    return {COMMAND_ACTIVATE,CurrentIndex}
+    local auxCurrentIndex = CurrentIndex
+	if CardsMatchingFilter(AIMon(),FilterLevel,4) > 0 then
+	  if HasIDNotNegated(Sum,77150143,SummonZBThroughblade) then
+        return {COMMAND_SUMMON,CurrentIndex}
+      end
+      if HasIDNotNegated(Sum,20155904) then -- ZBCluckle
+        return {COMMAND_SUMMON,CurrentIndex}
+      end
+      if HasIDNotNegated(Sum,04367330) then -- ZBRabbina
+        return {COMMAND_SUMMON,CurrentIndex}
+      end
+      if HasIDNotNegated(Sum,04145852) then -- ZBRam
+        return {COMMAND_SUMMON,CurrentIndex}
+      end
+	  if HasIDNotNegated(Sum,77150143) then -- ZBThroughblade
+        return {COMMAND_SUMMON,CurrentIndex}
+      end
+      if HasIDNotNegated(Sum,31755044) then -- ZBWhiptail
+        return {COMMAND_SUMMON,CurrentIndex}
+      end
+	end
+    return {COMMAND_ACTIVATE,auxCurrentIndex}
   end
   if HasIDNotNegated(Act,85115440,false,(85115440*16+1),UseZBBullhorn) then
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
-  if HasIDNotNegated(Act,11510448,false,(11510448*16+1),UseZBTigress) then
+  if HasIDNotNegated(Act,11510448,false,(11510448*16+1),UseZBTigermortar) then
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
   -- ACTIVE 2
@@ -1255,15 +1314,20 @@ function ZoodiacBeastInit(cards)
     end
 
 	-- ZB SPECIAL SUMMON
-	if HasIDNotNegated(Sum,78872731,SummonZBMarmorat) then
+	if HasIDNotNegated(Sum,78872731,SummonZBRatpier) then
       return {COMMAND_SUMMON,CurrentIndex}
+    end
+	-- ZBTenki
+    if HasIDNotNegated(Act,57103969) then -- Tenki
+      OPTSet(57103969)
+      return {COMMAND_ACTIVATE,CurrentIndex}
     end
 	-- ZBHammerkong
 	if HasIDNotNegated(SpSum,14970113,SummonZBHammerkong) then
       return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
     end
-	-- ZBTigress
-    if HasIDNotNegated(SpSum,11510448,SummonZBTigress) then
+	-- ZBTigermortar
+    if HasIDNotNegated(SpSum,11510448,SummonZBTigermortar) then
       return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
     end
 	-- ZBBullhorn
@@ -1272,11 +1336,6 @@ function ZoodiacBeastInit(cards)
     end
 	if HasIDNotNegated(SpSum,85115440,SummonZBBroadbull2) then
       return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
-    end
-	-- ZBTenki
-    if HasIDNotNegated(Act,57103969) then -- Tenki
-      OPTSet(57103969)
-      return {COMMAND_ACTIVATE,CurrentIndex}
     end
 	-- ZBGiantrainer
     if HasIDNotNegated(Sum,67136033,SummonZBBearman) then
@@ -1292,38 +1351,53 @@ function ZoodiacBeastInit(cards)
     if HasIDNotNegated(SpSum,96381979,SummonZBTigerKing) then
       return XYZSummon(nil,96381979)
     end
-	if HasIDNotNegated(Act,31755044,UseZBViper) then
+	if HasIDNotNegated(Act,31755044,UseZBWhiptail) then
       return {COMMAND_ACTIVATE,CurrentIndex}
     end
-	-- ZBTriangle
-    if HasIDNotNegated(Act,46060017,nil,nil,LOCATION_HAND,ActiveZBTriangle)
-    and MaxxCheck()
-    then
-      return {COMMAND_ACTIVATE,CurrentIndex}
-    end
-    if HasIDNotNegated(Act,46060017,nil,nil,LOCATION_SZONE,UseZBTriangle)
-    and MaxxCheck()
-    then
-      GlobalZBTriangle = 1
-      return {COMMAND_ACTIVATE,CurrentIndex}
-    end
+	-- ZBDaigusto
 	if HasIDNotNegated(SpSum,00581014,SummonZBDaigusto) then
       return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
     end
-	-- ZBTigress2
-	if HasIDNotNegated(SpSum,11510448,SummonZBTigress2) then
+	-- ZBTigermortar2
+	if HasIDNotNegated(SpSum,11510448,SummonZBTigermortar2) then
       return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
     end
 	-- ZBLayca
     if HasIDNotNegated(SpSum,41375811,SummonZBLayca) then
       return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
     end
+	-- ZBBarrage
+	if HasIDNotNegated(Act,46060017,nil,nil,LOCATION_HAND,ActiveZBBarrage)
+    then
+	  local auxCurrentIndex = CurrentIndex
+	  if HasIDNotNegated(Sum,04145852) -- ZBRam
+	  and CardsMatchingFilter(AIGrave(),ZBMonFilterWithAttack,04145852) > 0
+	  then
+       return {COMMAND_SUMMON,CurrentIndex}
+      end
+	  if HasIDNotNegated(Sum,04367330) -- ZBRabbina
+	  and CardsMatchingFilter(AIGrave(),ZBFilter,04367330) > 0
+	  then
+        return {COMMAND_SUMMON,CurrentIndex}
+      end
+	  if HasIDNotNegated(Sum,20155904) -- ZBCluckle
+	  and CardsMatchingFilter(AIGrave(),ZBFilter,20155904) > 0
+	  then
+        return {COMMAND_SUMMON,CurrentIndex}
+      end
+      return {COMMAND_ACTIVATE,auxCurrentIndex}
+    end
+	if HasIDNotNegated(Act,46060017,nil,nil,LOCATION_SZONE,UseZBBarrage)
+    then
+      GlobalZBBarrage = 1
+      return {COMMAND_ACTIVATE,CurrentIndex}
+    end
 	-- ZBBoarbow
     if HasIDNotNegated(SpSum,74393852,SummonZBBoarbow) then
       return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
     end
-	 -- ZBDrancia
-    if HasIDNotNegated(SpSum,48905153,SummonZBDrancia) then
+	 -- ZBDrident
+    if HasIDNotNegated(SpSum,48905153,SummonZBDrident) then
       return {COMMAND_SPECIAL_SUMMON,CurrentIndex}
     end
   end
@@ -1336,16 +1410,16 @@ function ZoodiacBeastInit(cards)
     OPTSet(57103969)
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
-  -- ZBTriangle
-  if HasIDNotNegated(Act,46060017,nil,nil,LOCATION_HAND,ActiveZBTriangle)
+  -- ZBBarrage
+  if HasIDNotNegated(Act,46060017,nil,nil,LOCATION_HAND,ActiveZBBarrage)
   and MaxxCheck()
   then
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
-  if HasIDNotNegated(Act,46060017,nil,nil,LOCATION_SZONE,UseZBTriangle)
+  if HasIDNotNegated(Act,46060017,nil,nil,LOCATION_SZONE,UseZBBarrage)
   and MaxxCheck()
   then
-    GlobalZBTriangle = 1
+    GlobalZBBarrage = 1
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
   -- SUMMON 2
@@ -1366,10 +1440,10 @@ function ZoodiacBeastInit(cards)
   if HasIDNotNegated(Sum,77150143) then -- ZBThroughblade
     return {COMMAND_SUMMON,CurrentIndex}
   end
-  if HasIDNotNegated(Sum,31755044) then -- ZBViper
+  if HasIDNotNegated(Sum,31755044) then -- ZBWhiptail
     return {COMMAND_SUMMON,CurrentIndex}
   end
-  if HasIDNotNegated(Act,31755044,UseZBViper2) then
+  if HasIDNotNegated(Act,31755044,UseZBWhiptail2) then
     return {COMMAND_ACTIVATE,CurrentIndex}
   end
 
@@ -1383,6 +1457,9 @@ function ZoodiacBeastInit(cards)
     end
   end
 
+  if HasIDNotNegated(Act,00581014) then -- ZBDaigusto
+    return {COMMAND_ACTIVATE,CurrentIndex}
+  end
   if TurnEndCheck() then
     if HasIDNotNegated(SetST,98918572) then
       return {COMMAND_SET_ST,CurrentIndex}
@@ -1400,7 +1477,7 @@ function ZoodiacBeastInit(cards)
       return {COMMAND_SET_ST,CurrentIndex}
     end
 
-	-- ZBMarmorat EFFECT
+	-- ZBRatpier EFFECT
     for i=1, #Act do
       local c = Act[i]
 	  if NotNegated(c) and c.description == (78872731*16+1)
@@ -1438,7 +1515,17 @@ function ZBNonXyzFilter(c,exceptId)
   if exceptId == nil then exceptId = 0 end
   return
     IsSetCode(c.setcode,0xf1)
+	and FilterType(c,TYPE_MONSTER)
 	and not FilterType(c,TYPE_XYZ)
+	and c.id ~= exceptId
+end
+function ZBMonFilterWithAttack(c,exceptId)
+  if exceptId == nil then exceptId = 0 end
+  return
+    IsSetCode(c.setcode,0xf1)
+	and FilterType(c,TYPE_MONSTER)
+	and c.attack > 0
+	and c.id ~= exceptId
 end
 
 function ZBBestDetachFilter(c)
@@ -1447,7 +1534,7 @@ function ZBBestDetachFilter(c)
 	or c.base_attack <= 0
 end
 
-function ZBTriangleFilter(c)
+function ZBBarrageFilter(c)
   return
     c.id == 57103969 -- ZBTenki
 	and FilterLocation(c,LOCATION_SZONE)
@@ -1463,7 +1550,7 @@ function ZBTriangleFilter(c)
 	and FilterLocation(c,LOCATION_MZONE)
 end
 
-function ZBDranciaDestroyFilter(c)
+function ZBDridentDestroyFilter(c)
   return (
     Targetable(c,TYPE_MONSTER)
     and Affected(c,TYPE_MONSTER)
@@ -1477,24 +1564,25 @@ end
 function UseZBThroughblade(c)
   return true
 end
-function UseZBViper(c)
+function UseZBWhiptail(c)
   return
 	FilterLocation(c,LOCATION_ONFIELD)
 	and #AIMon() == 5
+	and not NormalSummonCheck()
 end
-function UseZBViper2(c)
+function UseZBWhiptail2(c)
   return
 	FilterLocation(c,LOCATION_HAND)
 	and BattlePhaseCheck()
 end
 
-function UseZBDrancia(c)
+function UseZBDrident(c)
   local xyzmat = c.xyz_materials
   local countMatDetach = CardsMatchingFilter(xyzmat,ZBBestDetachFilter)
   local oppMonFaceUp = SubGroup(OppField(),FilterPosition,POS_FACEUP)
   local prio = SubGroup(oppMonFaceUp,FilterPriorityTarget)
   if countMatDetach > 0
-  and DestroyCheck(oppMonFaceUp,false,false,false,ZBDranciaDestroyFilter) > 0
+  and DestroyCheck(oppMonFaceUp,false,false,false,ZBDridentDestroyFilter) > 0
   and #prio > 0
   then
     return true
@@ -1509,12 +1597,12 @@ function UseZBBroadbull(c)
   OPTSet(c.id)
   return true
 end
-function UseZBTigress(c)
+function UseZBTigermortar(c)
   OPTSet(c.id)
   return true
 end
 
-function ActiveZBTriangle(c)
+function ActiveZBBarrage(c)
   if OPTCheck(c.id)
   and not HasIDNotNegated(AIST(),c.id,true)
   then
@@ -1522,8 +1610,8 @@ function ActiveZBTriangle(c)
   end
   return false
 end
-function UseZBTriangle(c)
-  if CardsMatchingFilter(AIField(),ZBTriangleFilter) > 0
+function UseZBBarrage(c)
+  if CardsMatchingFilter(AIField(),ZBBarrageFilter) > 0
   and OPTCheck(c.id)
   then
     OPTSet(c.id)
@@ -1547,15 +1635,19 @@ function UseZBTwinTwisters(c)
   if prio and targets>1 then
     return true
   end
-  if PriorityCheck(AIHand(),PRIO_TOGRAVE)>3 
+  if PriorityCheck(AIHand(),PRIO_TOGRAVE)>3
   and targets>1 then
     return true
   end
 end
 
 function UseZBDaigusto(c)
-  OPTSet(c.id)
-  return true
+  if CardsMatchingFilter(AIGrave(),FilterID,48905153) > 0 -- ZBDrident
+  then
+    OPTSet(c.id)
+    return true
+  end
+  return false
 end
 function UseZBInvoker(c)
   OPTSet(c.id)
@@ -1573,16 +1665,16 @@ end
 
 --[[LIST
 77150143, -- ZBThroughblade
-31755044, -- ZBViper
+31755044, -- ZBWhiptail
 20155904, -- ZBCluckle
 04367330, -- ZBRabbina
 04145852, -- ZBRam
-78872731, -- ZBMarmorat
+78872731, -- ZBRatpier
 67136033, -- ZBBearman
 81275020, -- STerrotop
 53932291, -- STaketomborg
 
-46060017, -- ZBTriangle
+46060017, -- ZBBarrage
 00675319, -- ZBSign
 57103969, -- ZBTenki
 10719350, -- ZBTensu
@@ -1590,11 +1682,11 @@ end
 98918572, -- ZBXiangke
 98954106, -- ZBJAvarice
 
-48905153, -- ZBDrancia
+48905153, -- ZBDrident
 74393852, -- ZBBoarbow
 41375811, -- ZBLayca
 85115440, -- ZBBroadbull
-11510448, -- ZBTigress
+11510448, -- ZBTigermortar
 14970113, -- ZBHammerkong
 
 30741334, -- ZBGiantrainer
@@ -1612,13 +1704,20 @@ function ZoodiacBeastEffectYesNo(id,card)
   if id == 77150143 then -- ZBThroughblade
     result = 1
   end
+  if id == 20155904 then -- ZBCluckle
+    result = 1
+  end
   if id == 04367330 then -- ZBRabbina
     result = 1
   end
   if id == 04145852 then -- ZBRam
     result = 1
   end
-  if id == 78872731 then -- ZBMarmorat
+  if id == 78872731 then -- ZBRatpier
+    result = 1
+  end
+  
+  if id == 74393852 then -- ZBBoarbow
     result = 1
   end
 
@@ -1626,8 +1725,8 @@ function ZoodiacBeastEffectYesNo(id,card)
     result = 1
   end
 
-  if id == 46060017 then -- ZBTriangle
-    GlobalZBTriangle = 2
+  if id == 46060017 then -- ZBBarrage
+    GlobalZBBarrage = 2
     result = 1
   end
 
@@ -1645,7 +1744,7 @@ function ZoodiacBeastYesNo(description_id)
   if (description_id/16) > 99999 then
     print("YesNo - id: "..(description_id/16).." - desc: "..description_id)
     if description_id/16 == 00675319 then -- ZodiacSign
-	  if GlobalZBTriangle == 0 then
+	  if GlobalZBBarrage == 0 then
 	    GlobalZodiacSign = 1
 	    return 1
 	  else
@@ -1660,18 +1759,19 @@ end
 function ZoodiacBeastOption(options)
   print("Options:")
   for i=1,#options do
-    print(options[i])
-	if options[i] == (48905153 * 16) -- ZBDrancia
-	or options[i] == (48905153 * 16) -- ZBDrancia
-	or options[i] == (74393852 * 16) -- ZBBoarbow
-	or options[i] == (41375811 * 16) -- ZBLayca
-	or options[i] == (85115440 * 16) -- ZBBroadbull
-	or options[i] == (11510448 * 16) -- ZBTigress
-	or options[i] == (14970113 * 16) -- ZBHammerkong
+    local op = options[i]
+    print(op)
+	if op == (48905153*16) -- ZBDrident
+	or op == (74393852*16) -- ZBBoarbow
+	or op == (41375811*16) -- ZBLayca
+	or op == (85115440*16) -- ZBBroadbull
+	or op == (11510448*16) -- ZBTigermortar
+	or op == (14970113*16) -- ZBHammerkong
 	then
-	  return i -- ZBEffect
+	  OPTSet((op/16) + 1)
+	  return i -- ZBXyzEffect
 	end
-    if options[i] == (67136033*16) then -- ZBBearman
+    if op == (67136033*16) then -- ZBBearman
 	  return i
 	end
   end
@@ -1689,7 +1789,7 @@ function SummonZBThroughblade(c)
   end
   return false
 end
-function SummonZBMarmorat(c)
+function SummonZBRatpier(c)
   if HasID(AIDeck(),c.id,true)
   and not HasID(AIMon(),c.id,true)
   and CardsMatchingFilter(AIMon(),ZBXyzFilter) == 0
@@ -1711,6 +1811,7 @@ function SummonZBTerrortop(c)
 end
 function SummonZBTaketomborg(c)
   if CardsMatchingFilter(AIExtra(),FilterRank,3) > 0 -- ZBInvoker
+  and CardsMatchingFilter(AIMon(),FilterLevel,3) > 0 
   then
     return true
   end
@@ -1719,7 +1820,7 @@ end
 
 function SummonZBHammerkong(c)
   if CardsMatchingFilter(AIMon(),ZBXyzFilter) == 0
-  and HasID(AIMon(),78872731,true) -- ZBMarmorat
+  and HasID(AIMon(),78872731,true) -- ZBRatpier
   then
     GlobalZBSummonId = c.id
 	OPTSet(c.id + 1)
@@ -1727,11 +1828,11 @@ function SummonZBHammerkong(c)
   end
   return false
 end
-function SummonZBTigress(c)
+function SummonZBTigermortar(c)
   if CardsMatchingFilter(AIMon(),ZBXyzFilter) > 0
   and OPTCheck(c.id + 1)
   and not HasID(AIMon(),c.id,true)
-  and HasID(AIGrave(),78872731,true) -- ZBMarmorat
+  and HasID(AIGrave(),78872731,true) -- ZBRatpier
   and HasID(UseLists({AIHand(),AIDeck()}),78872731,true)
   then
     GlobalZBSummonId = c.id
@@ -1740,7 +1841,7 @@ function SummonZBTigress(c)
   end
   return false
 end
-function SummonZBTigress2(c)
+function SummonZBTigermortar2(c)
   local zbMon = SubGroup(AIGrave(),ZBMonFilter)
   if CardsMatchingFilter(AIMon(),ZBXyzFilter) > 0
   and OPTCheck(c.id + 1)
@@ -1785,7 +1886,7 @@ function SummonZBLayca(c)
   and not HasID(AIMon(),c.id,true)
   and OPTCheck(c.id + 1)
   and CardsMatchingFilter(zbMon,FilterAttackMin,1) > 0
-  and OPTCheck(48905153 + 1) -- ZBDrancia
+  and OPTCheck(48905153 + 1) -- ZBDrident
   then
     GlobalZBSummonId = c.id
 	OPTSet(c.id + 1)
@@ -1807,7 +1908,7 @@ end
 function SummonZBBoarbow2(c)
   return false
 end
-function SummonZBDrancia(c)
+function SummonZBDrident(c)
   if CardsMatchingFilter(AIMon(),ZBXyzFilter) > 0
   and not HasID(AIMon(),c.id,true)
   and OPTCheck(c.id + 1)
@@ -1841,8 +1942,7 @@ function SummonZBTigerKing(c)
 end
 function SummonZBDaigusto(c)
   return
-    not HasIDNotNegated(AIMon(),c.id,true)
-	and CardsMatchingFilter(AIGrave(),FilterType,TYPE_MONSTER) >= 3
+    CardsMatchingFilter(AIGrave(),FilterType,TYPE_MONSTER) >= 3
 	and (
 	  not BattlePhaseCheck()
 	  or CardsMatchingFilter(AIMon(),FilterPosition,POS_FACEUP_DEFENSE) > 0
@@ -1878,13 +1978,13 @@ function ZBRamTarget(cards,min,max)
     return Add(cards,PRIO_TOGRAVE,min)
   end
 end
-function ZBMarmoratTarget(cards,min,max)
+function ZBRatpierTarget(cards,min,max)
   if LocCheck(cards,LOCATION_DECK) then
-    --print("ZBMarmorat - DECK TO FIELD")
+    --print("ZBRatpier - DECK TO FIELD")
     return Add(cards,PRIO_TOGRAVE,max)
   end
   if LocCheck(cards,LOCATION_OVERLAY) then
-    --print("ZBMarmorat - OVERLAY TO GRAVE")
+    --print("ZBRatpier - OVERLAY TO GRAVE")
     return Add(cards,PRIO_TOGRAVE,min)
   end
 end
@@ -1923,17 +2023,17 @@ function ZBHammerkongTarget(cards,min,max)
     return Add(cards,PRIO_TOGRAVE,min)
   end
 end
-function ZBTigressTarget(cards,min,max)
+function ZBTigermortarTarget(cards,min,max)
   if LocCheck(cards,LOCATION_OVERLAY) then
-    --print("ZBTigressTarget - OVERLAY to GRAVE")
+    --print("ZBTigermortarTarget - OVERLAY to GRAVE")
     return Add(cards,PRIO_TOGRAVE,min)
   end
   if LocCheck(cards,LOCATION_GRAVE) then
-    --print("ZBTigressTarget - GRAVE to OVERLAY")
+    --print("ZBTigermortarTarget - GRAVE to OVERLAY")
     return ZBAttachTarget(cards,min,max)
   end
   if LocCheck(cards,LOCATION_MZONE) then
-    --print("ZBTigressTarget - MON")
+    --print("ZBTigermortarTarget - MON")
     return FindID(11510448,cards,true) -- Own
   end
 end
@@ -1964,11 +2064,11 @@ function ZBBoarbowTarget(cards,min,max)
     return Add(cards,PRIO_TOGRAVE,min)
   end
 end
-function ZBDranciaTarget(cards,min,max)
+function ZBDridentTarget(cards,min,max)
   if LocCheck(cards,LOCATION_OVERLAY) then
     return Add(cards,PRIO_TOGRAVE,min)
   end
-  return BestTargets(cards,max,TARGET_DESTROY,ZBDranciaDestroyFilter,nil,nil,c)
+  return BestTargets(cards,max,TARGET_DESTROY,ZBDridentDestroyFilter,nil,nil,c)
 end
 
 GlobalZodiacSign = 0
@@ -1977,15 +2077,15 @@ function ZodiacSignTarget(cards,min,max,c)
   --CountPrioTarget(cards,PRIO_TOGRAVE,1,nil,nil,nil,"ZodiacSignTarget")
   return Add(cards,PRIO_TOGRAVE,max)
 end
-GlobalZBTriangle = 0
-function ZBTriangleTarget(cards,min,max)
+GlobalZBBarrage = 0
+function ZBBarrageTarget(cards,min,max)
   if LocCheck(cards,LOCATION_DECK)
   then
-    print("ZBTriangleTarget - DECK to FIELD")
+    print("ZBBarrageTarget - DECK to FIELD")
     return Add(cards,PRIO_TOFIELD,max)
   end
-  if GlobalZBTriangle == 1 then
-    print("ZBTriangleTarget - DESTROY")
+  if GlobalZBBarrage == 1 then
+    print("ZBBarrageTarget - DESTROY")
 	if HasID(cards,57103969,true) -- Tenki
 	then
       return FindID(57103969,cards,true)
@@ -1995,6 +2095,9 @@ function ZBTriangleTarget(cards,min,max)
 	elseif HasID(cards,81275020,true) -- STerrotop
 	then
 	  return FindID(81275020,cards,true)
+	elseif PriorityCheck(cards,PRIO_TOGRAVE) > 10 -- Negated
+	then
+	  return Add(cards,PRIO_TOGRAVE,1,ZBNonXyzFilter)
 	elseif HasID(cards,78872731,true) -- ZBMolmorat
 	then
 	  return FindID(78872731,cards,true)
@@ -2010,15 +2113,15 @@ function ZBTriangleTarget(cards,min,max)
 	and CardsMatchingFilter(AIGrave(),ZBMonFilter,04145852) > 0
 	then
 	  return FindID(04145852,cards,true)
-	elseif HasID(cards,46060017,true) -- ZBTriangle
+	elseif HasID(cards,46060017,true) -- ZBBarrage
 	then
 	  return FindID(46060017,cards,true)
 	else
 	  return Add(cards,PRIO_TOGRAVE,1,ZBNonXyzFilter)
 	end
   end
-  if GlobalZBTriangle == 2 then
-    print("ZBTriangleTarget - to MON")
+  if GlobalZBBarrage == 2 then
+    print("ZBBarrageTarget - to MON")
     return Add(cards,PRIO_TOGRAVE,max)
   end
 end
@@ -2055,16 +2158,16 @@ end
 
 --[[LIST
 77150143, -- ZBThroughblade
-31755044, -- ZBViper
+31755044, -- ZBWhiptail
 20155904, -- ZBCluckle
 04367330, -- ZBRabbina
 04145852, -- ZBRam
-78872731, -- ZBMarmorat
+78872731, -- ZBRatpier
 67136033, -- ZBBearman
 81275020, -- STerrotop
 53932291, -- STaketomborg
 
-46060017, -- ZBTriangle
+46060017, -- ZBBarrage
 00675319, -- ZBSign
 57103969, -- ZBTenki
 10719350, -- ZBTensu
@@ -2072,11 +2175,11 @@ end
 98918572, -- ZBXiangke
 98954106, -- ZBJAvarice
 
-48905153, -- ZBDrancia
+48905153, -- ZBDrident
 74393852, -- ZBBoarbow
 41375811, -- ZBLayca
 85115440, -- ZBBroadbull
-11510448, -- ZBTigress
+11510448, -- ZBTigermortar
 14970113, -- ZBHammerkong
 
 30741334, -- ZBGiantrainer
@@ -2093,7 +2196,7 @@ function ZoodiacBeastCard(cards,min,max,id,c)
   if id == 77150143 then -- ZBThroughblade
     return Add(cards,PRIO_DISCARD,min)
   end
-  if id == 31755044 then -- ZBViper
+  if id == 31755044 then -- ZBWhiptail
     return Add(cards,PRIO_TOGRAVE,min)
   end
    if id == 20155904 then -- ZBCluckle
@@ -2105,15 +2208,15 @@ function ZoodiacBeastCard(cards,min,max,id,c)
   if id == 04145852 then -- ZBRam
     return ZBRamTarget(cards,min,max)
   end
-  if id == 78872731 then -- ZBMarmorat
-    return ZBMarmoratTarget(cards,min,max)
+  if id == 78872731 then -- ZBRatpier
+    return ZBRatpierTarget(cards,min,max)
   end
 
   if id == 14970113 then -- ZBHammerkong
     return ZBHammerkongTarget(cards,min,max)
   end
-  if id == 11510448 then -- ZBTigress
-    return ZBTigressTarget(cards,min,max)
+  if id == 11510448 then -- ZBTigermortar
+    return ZBTigermortarTarget(cards,min,max)
   end
   if id == 85115440 then -- ZBBroadbull
     return ZBBroadbullTarget(cards,min,max)
@@ -2124,8 +2227,8 @@ function ZoodiacBeastCard(cards,min,max,id,c)
   if id == 74393852 then -- ZBBoarbow
     return ZBBoarbowTarget(cards,min,max)
   end
-  if id == 48905153 then -- ZBDrancia
-    return ZBDranciaTarget(cards,min,max,c)
+  if id == 48905153 then -- ZBDrident
+    return ZBDridentTarget(cards,min,max,c)
   end
 
   if id == 04423206 then -- ZBInvoker
@@ -2138,8 +2241,8 @@ function ZoodiacBeastCard(cards,min,max,id,c)
     return Add(cards,PRIO_TODECK,max)
   end
 
-  if id == 46060017 then -- ZBTriangle
-    return ZBTriangleTarget(cards,min,max,c)
+  if id == 46060017 then -- ZBBarrage
+    return ZBBarrageTarget(cards,min,max,c)
   end
   if id == 73881652 then -- ZBDirection
     return ZBDirectionTarget(cards,min,max,c)
@@ -2168,14 +2271,14 @@ function ZoodiacBeastMaterial(cards,min,max,id)
   if id then
     return Add(cards,PRIO_TOGRAVE,max)
   end
-  
+
   return nil
 end
 ------------------------
 -------- CHAIN ---------
 ------------------------
-function ChainZBViper(c,aiTurn)
-  --print("ChainZBViper")
+function ChainZBWhiptail(c,aiTurn)
+  --print("ChainZBWhiptail")
   if NegateCheckCard(c)
   or ZBRemovalCheckCard(c)
   or CardsMatchingFilter(OppMon(),ArmadesCheck) > 0
@@ -2208,7 +2311,7 @@ function ChainZBViper(c,aiTurn)
   end
   return false
 end
-function ChainZBDrancia(c,aiTurn)
+function ChainZBDrident(c,aiTurn)
   local oppFieldFaceUp = SubGroup(OppField(),FilterPosition,POS_FACEUP)
   if (RemovalCheckCard(c) or NegateCheckCard(c))
   and #oppFieldFaceUp > 0
@@ -2217,9 +2320,9 @@ function ChainZBDrancia(c,aiTurn)
     return true
   end
 
-  local targets = SubGroup(oppFieldFaceUp,ZBDranciaDestroyFilter)
+  local targets = SubGroup(oppFieldFaceUp,ZBDridentDestroyFilter)
   local prio = SubGroup(targets,FilterPriorityTarget)
-  if DestroyCheck(oppFieldFaceUp,false,false,false,ZBDranciaDestroyFilter) > 0
+  if DestroyCheck(oppFieldFaceUp,false,false,false,ZBDridentDestroyFilter) > 0
   then
     local xyzmat = c.xyz_materials
 	if xyzmat == nil then xyzmat = {} end
@@ -2250,6 +2353,12 @@ function ChainZBDrancia(c,aiTurn)
 end
 
 function ChainZBDirection(c)
+  if Duel.GetCurrentPhase() == PHASE_END
+  or ZBRemovalCheckCard(c)
+  then
+    OPTSet(c.id)
+    return true
+  end
   if IsBattlePhase() then
     if CardsMatchingFilter(OppMon(),ArmadesCheck) > 0
 	then
@@ -2264,12 +2373,6 @@ function ChainZBDirection(c)
         return true
 	  end
 	end
-  end
-  if Duel.GetCurrentPhase() == PHASE_END
-  or ZBRemovalCheckCard(c)
-  then
-    OPTSet(c.id)
-    return true
   end
   return false
 end
@@ -2300,6 +2403,166 @@ function ChainZBRabbinaRam(target)
   return result
 end
 
+GlobalDimensionalBarrier = nil
+function ZBChainDimensionalBarrier(source,negateOwn)
+  if negateOwn == nil then negateOwn = true end
+  print("ZBChainDimensionalBarrier")
+  if not UnchainableCheck(source.id)
+  and not RemovalCheckCard(source)
+  then
+    return false
+  end
+  local c,link = ChainCardNegation(source,false,0,nil,nil,true)
+  if c and Duel.GetOperationInfo(link,CATEGORY_SPECIAL_SUMMON)
+  and CanSpecialSummon(2)
+  then
+    local e = Duel.GetChainInfo(link, CHAININFO_TRIGGERING_EFFECT)
+    if FilterType(c,TYPE_SPELL+TYPE_TRAP)
+    and FilterType(c,TYPE_RITUAL)
+	and (
+	  negateOwn
+	  or CardsMatchingFilter(AIMon(),FilterType,TYPE_RITUAL) == 0
+	)
+    then
+      GlobalDimensionalBarrier = TYPE_RITUAL -- Ritual summon
+      SetNegated(link)
+      return true
+    end
+    if FilterSet(c,0x95) -- Rank-Up Magic
+	and (
+	  negateOwn
+	  or CardsMatchingFilter(AIMon(),FilterType,TYPE_XYZ) == 0
+	)
+    then
+      GlobalDimensionalBarrier = TYPE_XYZ -- Rank-Up XYZ summon
+      SetNegated(link)
+      return true
+    end
+    if e:IsHasCategory(CATEGORY_FUSION_SUMMON)
+	and (
+	  negateOwn
+	  or CardsMatchingFilter(AIMon(),FilterType,TYPE_FUSION) == 0
+	)
+    then
+      GlobalDimensionalBarrier = TYPE_FUSION -- Fusion summon
+      SetNegated(link)
+      return true
+    end
+  end
+  if Duel.GetCurrentChain()==0
+  and CanSpecialSummon(2)
+  and Duel.GetTurnPlayer()==1-player_ai
+  or RemovalCheckCard(source)
+  then
+    local cards = SubGroup(OppMon(),FilterPosition,POS_FACEUP)
+	local oppSynchro = SubGroup(OppExtra(),FilterType,TYPE_SYNCHRO)
+	if CardsMatchingFilter(cards,FilterTuner)>0
+    and CardsMatchingFilter(cards,FilterNonTuner)>0
+	and #oppSynchro > 0
+	and (
+	  negateOwn
+	  or CardsMatchingFilter(AIMon(),FilterType,TYPE_SYNCHRO) == 0
+	)
+    then
+	  local tuners = SubGroup(cards,FilterTuner)
+	  local nonTuners = SubGroup(cards,FilterNonTuner)
+	  local posSynchro = {}
+      for i=1,#tuners do
+	    local tuner = tuners[i]
+	    for j=1,#nonTuners do
+		  local nonTuner = nonTuners[j]
+		  posSynchro[#posSynchro+1] = (tuner.level + nonTuner.level)
+		end
+	  end
+	  for s=1,#posSynchro do
+	    local l = posSynchro[s]
+		if CardsMatchingFilter(oppSynchro,FilterLevel,l) then
+		  GlobalDimensionalBarrier = TYPE_SYNCHRO -- Synchro summon
+          return true
+		end
+	  end
+    end
+	if (
+	  negateOwn
+	  or CardsMatchingFilter(AIMon(),FilterType,TYPE_XYZ) == 0
+	)
+	then
+      cards=SubGroup(cards,FilterInvert,{FilterType,TYPE_TOKEN})
+	  local oppXyz = SubGroup(OppExtra(),FilterType,TYPE_XYZ)
+      for i,c in pairs(cards) do
+        if CardsMatchingFilter(cards,FilterLevel,c.level) > 1
+	    and CardsMatchingFilter(oppXyz,FilterRank,c.level) > 1
+	    and c.level <= 5
+        then
+          GlobalDimensionalBarrier = TYPE_XYZ -- XYZ summon
+          return true
+        end
+      end
+	end
+    if CanPendulumSummon(2)
+    and CardsMatchingFilter(OppExtra(),FilterPosition,POS_FACEUP)+#OppHand()>1
+	and (
+	  negateOwn
+	  or CardsMatchingFilter(AIMon(),FilterType,TYPE_PENDULUM) == 0
+	)
+    then
+      GlobalDimensionalBarrier = TYPE_PENDULUM -- Pendulum summon
+      return true
+    end
+  end
+  local c,link = ChainCardNegation(source,false,4,nil,nil,true)
+  if c and FilterType(c,TYPE_MONSTER)
+  and Affected(c,TYPE_TRAP)
+  then
+    local types={TYPE_RITUAL,TYPE_FUSION,TYPE_SYNCHRO,TYPE_XYZ,TYPE_PENDULUM}
+    for i,v in pairs(types) do
+      if FilterType(c,v)
+      and FilterLocation(c,LOCATION_ONFIELD)
+      and NotNegated(c)
+      then
+        GlobalDimensionalBarrier = v
+        SetNegated(link)
+        return true
+      end
+    end
+  end
+  if RemovalCheckCard(source) then
+    GlobalDimensionalBarrier = true
+    return true
+  end
+end
+
+--[[LIST
+77150143, -- ZBThroughblade
+31755044, -- ZBWhiptail
+20155904, -- ZBCluckle
+04367330, -- ZBRabbina
+04145852, -- ZBRam
+78872731, -- ZBRatpier
+67136033, -- ZBBearman
+81275020, -- STerrotop
+53932291, -- STaketomborg
+
+46060017, -- ZBBarrage
+00675319, -- ZBSign
+57103969, -- ZBTenki
+10719350, -- ZBTensu
+73881652, -- ZBDirection
+98918572, -- ZBXiangke
+98954106, -- ZBJAvarice
+
+48905153, -- ZBDrident
+74393852, -- ZBBoarbow
+41375811, -- ZBLayca
+85115440, -- ZBBroadbull
+11510448, -- ZBTigermortar
+14970113, -- ZBHammerkong
+
+30741334, -- ZBGiantrainer
+96381979, -- ZBTigerKing
+00581014, -- ZBDaigusto
+04423206, -- ZBInvoker
+]]
 function ZoodiacBeastChain(cards)
   if HasID(cards,4145852)
   and EffectCheck(player_ai) == nil
@@ -2323,7 +2586,7 @@ function ZoodiacBeastChain(cards)
     return {1,CurrentIndex}
   end
 
-  if HasIDNotNegated(cards,83326048,ChainDimensionalBarrier) then
+  if HasIDNotNegated(cards,83326048,ZBChainDimensionalBarrier,false) then
     return Activate()
   end
   if HasIDNotNegated(cards,40605147,ChainNegation,4) and AI.GetPlayerLP(1)>1500 then -- Solemn Notice
@@ -2342,7 +2605,7 @@ function ZoodiacBeastChain(cards)
   -- TURN CHAIN
   local aiTurn = Duel.GetTurnPlayer() ~= (1 - player_ai)
 
-  if HasIDNotNegated(cards,31755044,ChainZBViper,aiTurn)
+  if HasIDNotNegated(cards,31755044,ChainZBWhiptail,aiTurn)
   then
     return {1,CurrentIndex}
   end
@@ -2353,7 +2616,7 @@ function ZoodiacBeastChain(cards)
     if HasIDNotNegated(cards,73881652,false,nil,LOCATION_SZONE,ChainZBDirection) then
       return {1,CurrentIndex}
     end
-    if HasIDNotNegated(cards,48905153,ChainZBDrancia,false)
+    if HasIDNotNegated(cards,48905153,ChainZBDrident,false)
 	then
       return {1,CurrentIndex}
     end
@@ -2361,7 +2624,7 @@ function ZoodiacBeastChain(cards)
       return {1,CurrentIndex}
     end
   else
-    if HasIDNotNegated(cards,48905153,ChainZBDrancia,true)
+    if HasIDNotNegated(cards,48905153,ChainZBDrident,true)
 	then
       return {1,CurrentIndex}
     end
@@ -2378,16 +2641,16 @@ end
 
 --[[LIST
 77150143, -- ZBThroughblade
-31755044, -- ZBViper
+31755044, -- ZBWhiptail
 20155904, -- ZBCluckle
 04367330, -- ZBRabbina
 04145852, -- ZBRam
-78872731, -- ZBMarmorat
+78872731, -- ZBRatpier
 67136033, -- ZBBearman
 81275020, -- STerrotop
 53932291, -- STaketomborg
 
-46060017, -- ZBTriangle
+46060017, -- ZBBarrage
 00675319, -- ZBSign
 57103969, -- ZBTenki
 10719350, -- ZBTensu
@@ -2395,11 +2658,11 @@ end
 98918572, -- ZBXiangke
 98954106, -- ZBJAvarice
 
-48905153, -- ZBDrancia
+48905153, -- ZBDrident
 74393852, -- ZBBoarbow
 41375811, -- ZBLayca
 85115440, -- ZBBroadbull
-11510448, -- ZBTigress
+11510448, -- ZBTigermortar
 14970113, -- ZBHammerkong
 
 30741334, -- ZBGiantrainer
@@ -2408,19 +2671,19 @@ end
 04423206, -- ZBInvoker
 ]]
 ZoodiacBeastAtt={
-48905153, -- ZBDrancia
+48905153, -- ZBDrident
 74393852, -- ZBBoarbow
 --41375811, -- ZBLayca
 --85115440, -- ZBBroadbull
-11510448, -- ZBTigress
+11510448, -- ZBTigermortar
 --14970113, -- ZBHammerkong
-31755044, -- ZBViper
+31755044, -- ZBWhiptail
 }
 ZoodiacBeastDef={
 20155904, -- ZBCluckle
 04367330, -- ZBRabbina
 04145852, -- ZBRam
-78872731, -- ZBMarmorat
+78872731, -- ZBRatpier
 }
 function ZoodiacBeastPosition(id,available)
   result = nil
@@ -2473,8 +2736,8 @@ function ZoodiacBeastBattleCommand(cards, activatable)
   else
     targets = attackable
   end
-  
-  if HasIDNotNegated(cards,31755044) -- ZBViper
+
+  if HasIDNotNegated(cards,31755044) -- ZBWhiptail
   and (
     CanWinBattle(cards[CurrentIndex],targets)
 	or #OppMon() == 0
@@ -2482,7 +2745,7 @@ function ZoodiacBeastBattleCommand(cards, activatable)
   then
     return Attack(CurrentIndex)
   end
-  if HasIDNotNegated(cards,48905153) -- ZBDrancia
+  if HasIDNotNegated(cards,48905153) -- ZBDrident
   and CanWinBattle(cards[CurrentIndex],targets)
   then
     return Attack(CurrentIndex)
@@ -2493,16 +2756,16 @@ end
 
 --[[LIST
 77150143, -- ZBThroughblade
-31755044, -- ZBViper
+31755044, -- ZBWhiptail
 20155904, -- ZBCluckle
 04367330, -- ZBRabbina
 04145852, -- ZBRam
-78872731, -- ZBMarmorat
+78872731, -- ZBRatpier
 67136033, -- ZBBearman
 81275020, -- STerrotop
 53932291, -- STaketomborg
 
-46060017, -- ZBTriangle
+46060017, -- ZBBarrage
 00675319, -- ZBSign
 57103969, -- ZBTenki
 10719350, -- ZBTensu
@@ -2510,11 +2773,11 @@ end
 98918572, -- ZBXiangke
 98954106, -- ZBJAvarice
 
-48905153, -- ZBDrancia
+48905153, -- ZBDrident
 74393852, -- ZBBoarbow
 41375811, -- ZBLayca
 85115440, -- ZBBroadbull
-11510448, -- ZBTigress
+11510448, -- ZBTigermortar
 14970113, -- ZBHammerkong
 
 30741334, -- ZBGiantrainer
